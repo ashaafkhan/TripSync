@@ -24,14 +24,6 @@
 
 ---
 
-## 📸 Preview
-
-| Landing Page | Dashboard | Itinerary |
-|---|---|---|
-| ![Landing](https://trip-sync-apk.vercel.app/favicon.svg) | Plan your next adventure | Day-by-day activity planner |
-
----
-
 ## 🚀 Features
 
 ### 🗺️ Trip Management
