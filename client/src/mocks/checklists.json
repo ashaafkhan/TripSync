@@ -1,0 +1,55 @@
+{
+  "t1": {
+    "packing": {
+      "id": "cl1",
+      "tripId": "t1",
+      "type": "packing",
+      "items": [
+        { "id": "pi1", "label": "Passport & visa", "completed": true },
+        { "id": "pi2", "label": "Sunscreen SPF 50", "completed": true },
+        { "id": "pi3", "label": "Swimwear (3 sets)", "completed": false },
+        { "id": "pi4", "label": "Light linen shirts", "completed": false },
+        { "id": "pi5", "label": "Travel adapter", "completed": true },
+        { "id": "pi6", "label": "Mosquito repellent", "completed": false },
+        { "id": "pi7", "label": "Snorkeling mask", "completed": false },
+        { "id": "pi8", "label": "First aid kit", "completed": true }
+      ]
+    },
+    "todo": {
+      "id": "cl2",
+      "tripId": "t1",
+      "type": "todo",
+      "items": [
+        { "id": "ti1", "label": "Book airport transfer", "completed": true },
+        { "id": "ti2", "label": "Confirm hotel reservation", "completed": true },
+        { "id": "ti3", "label": "Check visa requirements", "completed": true },
+        { "id": "ti4", "label": "Exchange currency to IDR", "completed": false },
+        { "id": "ti5", "label": "Download offline maps", "completed": false },
+        { "id": "ti6", "label": "Buy travel insurance", "completed": false }
+      ]
+    }
+  },
+  "t2": {
+    "packing": {
+      "id": "cl3",
+      "tripId": "t2",
+      "type": "packing",
+      "items": [
+        { "id": "pi9", "label": "Winter jacket", "completed": false },
+        { "id": "pi10", "label": "Thermals", "completed": false },
+        { "id": "pi11", "label": "Passport", "completed": true },
+        { "id": "pi12", "label": "IC card / Suica", "completed": false }
+      ]
+    },
+    "todo": {
+      "id": "cl4",
+      "tripId": "t2",
+      "type": "todo",
+      "items": [
+        { "id": "ti7", "label": "Book JR Pass", "completed": true },
+        { "id": "ti8", "label": "Reserve teamLab Planets tickets", "completed": false },
+        { "id": "ti9", "label": "Plan Kyoto day trip", "completed": false }
+      ]
+    }
+  }
+}

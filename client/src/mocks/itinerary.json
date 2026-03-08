@@ -1,0 +1,107 @@
+{
+  "t1": [
+    {
+      "id": "day1",
+      "tripId": "t1",
+      "date": "2026-06-10",
+      "label": "Arrival Day",
+      "activities": [
+        {
+          "id": "a1",
+          "dayId": "day1",
+          "time": "14:00",
+          "title": "Check into hotel",
+          "location": "The Mulia, Nusa Dua",
+          "type": "stay",
+          "notes": "Ocean view room confirmed. Bring booking confirmation.",
+          "commentCount": 2,
+          "order": 0
+        },
+        {
+          "id": "a2",
+          "dayId": "day1",
+          "time": "19:00",
+          "title": "Welcome dinner",
+          "location": "Merah Putih Restaurant",
+          "type": "food",
+          "notes": "Make a reservation for the group.",
+          "commentCount": 1,
+          "order": 1
+        }
+      ]
+    },
+    {
+      "id": "day2",
+      "tripId": "t1",
+      "date": "2026-06-11",
+      "label": "Temple Day",
+      "activities": [
+        {
+          "id": "a3",
+          "dayId": "day2",
+          "time": "09:00",
+          "title": "Visit Tanah Lot Temple",
+          "location": "Tanah Lot, Bali",
+          "type": "sightseeing",
+          "notes": "Early morning for fewer crowds.",
+          "commentCount": 0,
+          "order": 0
+        },
+        {
+          "id": "a4",
+          "dayId": "day2",
+          "time": "13:00",
+          "title": "Lunch at Warung Makan",
+          "location": "Tabanan",
+          "type": "food",
+          "notes": "Try the local nasi campur.",
+          "commentCount": 1,
+          "order": 1
+        },
+        {
+          "id": "a5",
+          "dayId": "day2",
+          "time": "16:00",
+          "title": "Transfer to Ubud",
+          "location": "Ubud, Bali",
+          "type": "transport",
+          "notes": "Private van transfer, ~1.5 hours.",
+          "commentCount": 0,
+          "order": 2
+        }
+      ]
+    }
+  ],
+  "t2": [
+    {
+      "id": "day3",
+      "tripId": "t2",
+      "date": "2026-12-20",
+      "label": "Tokyo Arrival",
+      "activities": [
+        {
+          "id": "a6",
+          "dayId": "day3",
+          "time": "10:00",
+          "title": "Arrive at Narita Airport",
+          "location": "Narita International Airport",
+          "type": "transport",
+          "notes": "Flight JL004. Clear customs, get Suica card.",
+          "commentCount": 0,
+          "order": 0
+        },
+        {
+          "id": "a7",
+          "dayId": "day3",
+          "time": "15:00",
+          "title": "Check in to Shinjuku Hotel",
+          "location": "Park Hyatt Tokyo",
+          "type": "stay",
+          "notes": "Club floor access included.",
+          "commentCount": 3,
+          "order": 1
+        }
+      ]
+    }
+  ]
+}

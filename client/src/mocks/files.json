@@ -1,0 +1,109 @@
+{
+  "t1": {
+    "files": [
+      {
+        "id": "f1",
+        "tripId": "t1",
+        "name": "Bali_Hotel_Confirmation.pdf",
+        "type": "pdf",
+        "size": 245000,
+        "url": "/mocks/sample.pdf",
+        "uploadedBy": "u1",
+        "uploadedAt": "2026-03-02T09:00:00Z"
+      },
+      {
+        "id": "f2",
+        "tripId": "t1",
+        "name": "Flight_Tickets.pdf",
+        "type": "pdf",
+        "size": 182000,
+        "url": "/mocks/sample.pdf",
+        "uploadedBy": "u1",
+        "uploadedAt": "2026-03-10T14:00:00Z"
+      },
+      {
+        "id": "f3",
+        "tripId": "t1",
+        "name": "Bali_Map.jpg",
+        "type": "image",
+        "size": 1024000,
+        "url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400",
+        "uploadedBy": "u2",
+        "uploadedAt": "2026-03-12T11:00:00Z"
+      }
+    ],
+    "reservations": [
+      {
+        "id": "r1",
+        "tripId": "t1",
+        "type": "hotel",
+        "name": "The Mulia Bali",
+        "bookingRef": "MUL-2026-7764",
+        "checkIn": "2026-06-10",
+        "checkOut": "2026-06-20",
+        "notes": "Ocean view room, breakfast included",
+        "confirmedBy": "u1"
+      },
+      {
+        "id": "r2",
+        "tripId": "t1",
+        "type": "flight",
+        "name": "Emirates EK412 — DXB to DPS",
+        "bookingRef": "EK-TRP-9910",
+        "checkIn": "2026-06-10",
+        "checkOut": null,
+        "notes": "Departs 02:30 AM, arrives 18:45 local time",
+        "confirmedBy": "u1"
+      },
+      {
+        "id": "r3",
+        "tripId": "t1",
+        "type": "restaurant",
+        "name": "Merah Putih Restaurant",
+        "bookingRef": "MP-RES-221",
+        "checkIn": "2026-06-10",
+        "checkOut": null,
+        "notes": "Dinner reservation for 3 at 7pm",
+        "confirmedBy": "u2"
+      }
+    ]
+  },
+  "t2": {
+    "files": [
+      {
+        "id": "f4",
+        "tripId": "t2",
+        "name": "Tokyo_Itinerary.pdf",
+        "type": "pdf",
+        "size": 312000,
+        "url": "/mocks/sample.pdf",
+        "uploadedBy": "u1",
+        "uploadedAt": "2026-11-01T08:00:00Z"
+      }
+    ],
+    "reservations": [
+      {
+        "id": "r4",
+        "tripId": "t2",
+        "type": "hotel",
+        "name": "Park Hyatt Tokyo",
+        "bookingRef": "PHT-12345",
+        "checkIn": "2026-12-20",
+        "checkOut": "2026-12-30",
+        "notes": "Club floor, city views",
+        "confirmedBy": "u4"
+      },
+      {
+        "id": "r5",
+        "tripId": "t2",
+        "type": "flight",
+        "name": "Japan Airlines JL004 — LHR to NRT",
+        "bookingRef": "JL-TRP-5522",
+        "checkIn": "2026-12-20",
+        "checkOut": null,
+        "notes": "Business class, departs 13:00",
+        "confirmedBy": "u1"
+      }
+    ]
+  }
+}

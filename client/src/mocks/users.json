@@ -1,0 +1,26 @@
+[
+  {
+    "id": "u1",
+    "name": "Alice Carter",
+    "email": "alice@example.com",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice"
+  },
+  {
+    "id": "u2",
+    "name": "Bob Nguyen",
+    "email": "bob@example.com",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob"
+  },
+  {
+    "id": "u3",
+    "name": "Clara Singh",
+    "email": "clara@example.com",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Clara"
+  },
+  {
+    "id": "u4",
+    "name": "David Kim",
+    "email": "david@example.com",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=David"
+  }
+]
