@@ -50,7 +50,7 @@ export function LandingPage() {
       <main className="max-w-6xl mx-auto px-8 pt-20 pb-24 text-center">
         <div className="inline-flex items-center gap-2 bg-white/10 text-[#E94560] px-3 py-1 rounded-full text-sm font-medium mb-6">
           <span className="w-2 h-2 rounded-full bg-[#E94560] animate-pulse" />
-          Now in Phase 1 — Buildathon 2026
+          Now in Phase 1
         </div>
         <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6">
           Plan trips together,<br />
@@ -107,7 +107,7 @@ export function LandingPage() {
       </section>
 
       <footer className="text-center text-gray-500 text-sm py-6 border-t border-white/10">
-        © 2026 TripSync · Built for ChaiCode Buildathon
+        © 2026 TripSync
       </footer>
     </div>
   );

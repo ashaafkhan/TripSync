@@ -1,9 +1,8 @@
-const { body } = require('express-validator');
+﻿const { body } = require('express-validator');
 const asyncHandler = require('../utils/asyncHandler');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 const Checklist = require('../models/Checklist');
 
-// Helper to get or create a checklist by type for a trip
 const getOrCreate = async (tripId, type) => {
   let checklist = await Checklist.findOne({ trip: tripId, type });
   if (!checklist) {
@@ -12,13 +11,11 @@ const getOrCreate = async (tripId, type) => {
   return checklist;
 };
 
-// ─── GET /api/v1/trips/:tripId/checklists ─────────────────────────────────────
 exports.getChecklists = asyncHandler(async (req, res) => {
   const checklists = await Checklist.find({ trip: req.params.tripId });
   successResponse(res, 200, 'Checklists fetched', checklists, { count: checklists.length });
 });
 
-// ─── POST /api/v1/trips/:tripId/checklists/:type/items ───────────────────────
 exports.addItem = asyncHandler(async (req, res) => {
   const { type } = req.params;
   const { text } = req.body;
@@ -30,7 +27,6 @@ exports.addItem = asyncHandler(async (req, res) => {
   successResponse(res, 201, 'Item added', checklist);
 });
 
-// ─── PATCH /api/v1/trips/:tripId/checklists/:type/items/:itemId ──────────────
 exports.updateItem = asyncHandler(async (req, res) => {
   const { type, itemId } = req.params;
   const { text, completed } = req.body;
@@ -48,7 +44,6 @@ exports.updateItem = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Item updated', checklist);
 });
 
-// ─── DELETE /api/v1/trips/:tripId/checklists/:type/items/:itemId ─────────────
 exports.deleteItem = asyncHandler(async (req, res) => {
   const { type, itemId } = req.params;
 
@@ -64,7 +59,7 @@ exports.deleteItem = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Item deleted', checklist);
 });
 
-// ─── Validation ──────────────────────────────────────────────────────────────
+
 exports.addItemValidation = [
   body('text').notEmpty().withMessage('Item text is required'),
 ];

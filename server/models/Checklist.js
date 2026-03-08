@@ -18,7 +18,6 @@ const checklistSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// One checklist per type per trip
 checklistSchema.index({ trip: 1, type: 1 }, { unique: true });
 
 module.exports = mongoose.model('Checklist', checklistSchema);

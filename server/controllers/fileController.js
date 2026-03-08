@@ -1,10 +1,9 @@
-const asyncHandler = require('../utils/asyncHandler');
+﻿const asyncHandler = require('../utils/asyncHandler');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 const cloudinary = require('../config/cloudinary');
 const File = require('../models/File');
 const streamifier = require('streamifier');
 
-// Helper: upload buffer to Cloudinary as a stream
 const uploadToCloudinary = (buffer, options) => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(options, (error, result) => {
@@ -15,7 +14,6 @@ const uploadToCloudinary = (buffer, options) => {
   });
 };
 
-// ─── GET /api/v1/trips/:tripId/files ─────────────────────────────────────────
 exports.getFiles = asyncHandler(async (req, res) => {
   const files = await File.find({ trip: req.params.tripId })
     .populate('uploadedBy', 'name email avatar')
@@ -24,7 +22,6 @@ exports.getFiles = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Files fetched', files, { count: files.length });
 });
 
-// ─── POST /api/v1/trips/:tripId/files ────────────────────────────────────────
 exports.uploadFile = asyncHandler(async (req, res) => {
   if (!req.file) return errorResponse(res, 400, 'No file uploaded');
 
@@ -36,7 +33,6 @@ exports.uploadFile = asyncHandler(async (req, res) => {
     public_id: `${Date.now()}-${originalname.replace(/\s+/g, '_')}`,
   });
 
-  // Determine file type for DB
   let fileType = 'other';
   if (mimetype.startsWith('image/')) fileType = 'image';
   else if (mimetype === 'application/pdf') fileType = 'pdf';
@@ -55,7 +51,6 @@ exports.uploadFile = asyncHandler(async (req, res) => {
   successResponse(res, 201, 'File uploaded', file);
 });
 
-// ─── GET /api/v1/trips/:tripId/files/:fileId/download ───────────────────────
 exports.downloadFile = asyncHandler(async (req, res) => {
   const file = await File.findOne({ _id: req.params.fileId, trip: req.params.tripId });
   if (!file) return errorResponse(res, 404, 'File not found');
@@ -79,7 +74,6 @@ exports.downloadFile = asyncHandler(async (req, res) => {
   }
 });
 
-// ─── DELETE /api/v1/trips/:tripId/files/:fileId ───────────────────────────────
 exports.deleteFile = asyncHandler(async (req, res) => {
   const file = await File.findOne({ _id: req.params.fileId, trip: req.params.tripId });
   if (!file) return errorResponse(res, 404, 'File not found');
@@ -90,7 +84,6 @@ exports.deleteFile = asyncHandler(async (req, res) => {
     return errorResponse(res, 403, 'Only the uploader or trip owner can delete this file');
   }
 
-  // Delete from Cloudinary
   await cloudinary.uploader.destroy(file.publicId, { resource_type: 'auto' });
 
   await file.deleteOne();

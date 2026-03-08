@@ -6,7 +6,6 @@ const Trip = require('../models/Trip');
 const generateToken = require('../utils/generateToken');
 const getFirebaseAdmin = require('../config/firebase');
 
-// ─── Helper: send token in cookie + body ─────────────────────────────────────
 const sendTokenResponse = (res, statusCode, message, user) => {
   const token = generateToken(user._id);
 
@@ -14,7 +13,7 @@ const sendTokenResponse = (res, statusCode, message, user) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   const userObj = user.toObject();
@@ -23,7 +22,6 @@ const sendTokenResponse = (res, statusCode, message, user) => {
   return successResponse(res, statusCode, message, { user: userObj, token });
 };
 
-// ─── POST /api/v1/auth/register ──────────────────────────────────────────────
 exports.register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -32,7 +30,6 @@ exports.register = asyncHandler(async (req, res) => {
 
   const user = await User.create({ name, email, password });
 
-  // Auto-join any trips where this email was pending-invited
   const pendingTrips = await Trip.find({ 'pendingInvites.email': email.toLowerCase() });
   for (const trip of pendingTrips) {
     const invite = trip.pendingInvites.find((i) => i.email === email.toLowerCase());
@@ -46,7 +43,6 @@ exports.register = asyncHandler(async (req, res) => {
   sendTokenResponse(res, 201, 'Account created', user);
 });
 
-// ─── POST /api/v1/auth/login ─────────────────────────────────────────────────
 exports.login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -58,18 +54,15 @@ exports.login = asyncHandler(async (req, res) => {
   sendTokenResponse(res, 200, 'Login successful', user);
 });
 
-// ─── POST /api/v1/auth/logout ────────────────────────────────────────────────
 exports.logout = asyncHandler(async (_req, res) => {
   res.cookie('token', '', { httpOnly: true, expires: new Date(0) });
   successResponse(res, 200, 'Logged out successfully');
 });
 
-// ─── GET /api/v1/auth/me ─────────────────────────────────────────────────────
 exports.getMe = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Current user', req.user);
 });
 
-// ─── PATCH /api/v1/auth/me ───────────────────────────────────────────────────
 exports.updateMe = asyncHandler(async (req, res) => {
   const { name, avatar } = req.body;
   const updated = await User.findByIdAndUpdate(
@@ -81,7 +74,6 @@ exports.updateMe = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Profile updated', updated);
 });
 
-// ─── POST /api/v1/auth/google ─────────────────────────────────────────────────
 exports.googleAuth = asyncHandler(async (req, res) => {
   const { idToken } = req.body;
   if (!idToken) return errorResponse(res, 400, 'Firebase ID token required');
@@ -97,11 +89,9 @@ exports.googleAuth = asyncHandler(async (req, res) => {
   const { uid, email, name, picture } = decoded;
   if (!email) return errorResponse(res, 400, 'Google account has no email');
 
-  // Find existing user or create one
   let user = await User.findOne({ email });
 
   if (user) {
-    // Link googleId if not already
     if (!user.googleId) {
       user.googleId = uid;
       await user.save();
@@ -112,10 +102,8 @@ exports.googleAuth = asyncHandler(async (req, res) => {
       email,
       googleId: uid,
       avatar: picture || '',
-      // no password — Google users don't need one
     });
 
-    // Auto-join any pending invites
     const pendingTrips = await Trip.find({ 'pendingInvites.email': email.toLowerCase() });
     for (const trip of pendingTrips) {
       const invite = trip.pendingInvites.find((i) => i.email === email.toLowerCase());
@@ -130,7 +118,6 @@ exports.googleAuth = asyncHandler(async (req, res) => {
   sendTokenResponse(res, 200, 'Google login successful', user);
 });
 
-// ─── Validation rules (exported for router) ──────────────────────────────────
 exports.registerValidation = [
   body('name').notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Valid email required'),

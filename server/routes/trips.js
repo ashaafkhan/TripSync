@@ -17,16 +17,13 @@ const {
   inviteValidation,
 } = require('../controllers/tripController');
 
-// No :tripId param — no role check needed
 router.get('/', verifyToken, getTrips);
 router.post('/', verifyToken, createTripValidation, validate, createTrip);
 
-// All routes below require membership verification via checkRole
 router.get('/:tripId', verifyToken, checkRole(['owner', 'editor', 'viewer']), getTrip);
 router.patch('/:tripId', verifyToken, checkRole(['owner']), updateTrip);
 router.delete('/:tripId', verifyToken, checkRole(['owner']), deleteTrip);
 
-// Membership management
 router.post('/:tripId/invite', verifyToken, checkRole(['owner']), inviteValidation, validate, inviteMember);
 router.patch('/:tripId/members/:userId', verifyToken, checkRole(['owner']), changeMemberRole);
 router.delete('/:tripId/members/:userId', verifyToken, checkRole(['owner']), removeMember);

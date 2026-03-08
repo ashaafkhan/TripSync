@@ -6,13 +6,11 @@ async function getTransporter() {
   if (_transporter) return _transporter;
 
   if (process.env.EMAIL_USER && process.env.EMAIL_USER !== 'your_gmail@gmail.com') {
-    // Use real Gmail if credentials are configured
     _transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
     });
   } else {
-    // Auto-create an Ethereal test account (no setup required)
     const testAccount = await nodemailer.createTestAccount();
     _transporter = nodemailer.createTransport({
       host: 'smtp.ethereal.email',

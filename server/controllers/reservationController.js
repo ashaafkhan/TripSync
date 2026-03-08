@@ -1,9 +1,8 @@
-const { body } = require('express-validator');
+﻿const { body } = require('express-validator');
 const asyncHandler = require('../utils/asyncHandler');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 const Reservation = require('../models/Reservation');
 
-// ─── GET /api/v1/trips/:tripId/reservations ───────────────────────────────────
 exports.getReservations = asyncHandler(async (req, res) => {
   const reservations = await Reservation.find({ trip: req.params.tripId })
     .populate('addedBy', 'name email avatar')
@@ -12,7 +11,6 @@ exports.getReservations = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Reservations fetched', reservations, { count: reservations.length });
 });
 
-// ─── POST /api/v1/trips/:tripId/reservations ──────────────────────────────────
 exports.addReservation = asyncHandler(async (req, res) => {
   const { type, title, bookingRef, checkIn, checkOut, notes } = req.body;
 
@@ -31,7 +29,6 @@ exports.addReservation = asyncHandler(async (req, res) => {
   successResponse(res, 201, 'Reservation added', reservation);
 });
 
-// ─── PATCH /api/v1/trips/:tripId/reservations/:reservationId ─────────────────
 exports.updateReservation = asyncHandler(async (req, res) => {
   const allowed = ['type', 'title', 'bookingRef', 'checkIn', 'checkOut', 'notes'];
   const updates = {};
@@ -47,7 +44,6 @@ exports.updateReservation = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Reservation updated', reservation);
 });
 
-// ─── DELETE /api/v1/trips/:tripId/reservations/:reservationId ────────────────
 exports.deleteReservation = asyncHandler(async (req, res) => {
   const reservation = await Reservation.findOneAndDelete({
     _id: req.params.reservationId,
@@ -57,7 +53,6 @@ exports.deleteReservation = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Reservation deleted');
 });
 
-// ─── Validation ──────────────────────────────────────────────────────────────
 exports.addReservationValidation = [
   body('type')
     .isIn(['hotel', 'flight', 'car', 'restaurant', 'activity', 'other'])

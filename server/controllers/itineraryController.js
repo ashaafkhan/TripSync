@@ -1,10 +1,9 @@
-const { body } = require('express-validator');
+﻿const { body } = require('express-validator');
 const asyncHandler = require('../utils/asyncHandler');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 const Day = require('../models/Day');
 const Activity = require('../models/Activity');
 
-// ─── GET /api/v1/trips/:tripId/itinerary ─────────────────────────────────────
 exports.getItinerary = asyncHandler(async (req, res) => {
   const days = await Day.find({ trip: req.params.tripId })
     .populate({
@@ -16,7 +15,6 @@ exports.getItinerary = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Itinerary fetched', days, { count: days.length });
 });
 
-// ─── POST /api/v1/trips/:tripId/itinerary/days ───────────────────────────────
 exports.addDay = asyncHandler(async (req, res) => {
   const { date, notes, order } = req.body;
 
@@ -34,7 +32,6 @@ exports.addDay = asyncHandler(async (req, res) => {
   successResponse(res, 201, 'Day added', day);
 });
 
-// ─── PATCH /api/v1/trips/:tripId/itinerary/days/:dayId ───────────────────────
 exports.updateDay = asyncHandler(async (req, res) => {
   const { notes, order } = req.body;
   const updates = {};
@@ -51,18 +48,15 @@ exports.updateDay = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Day updated', day);
 });
 
-// ─── DELETE /api/v1/trips/:tripId/itinerary/days/:dayId ──────────────────────
 exports.deleteDay = asyncHandler(async (req, res) => {
   const day = await Day.findOneAndDelete({ _id: req.params.dayId, trip: req.params.tripId });
   if (!day) return errorResponse(res, 404, 'Day not found');
 
-  // Cascade delete activities belonging to this day
   await Activity.deleteMany({ day: day._id });
 
   successResponse(res, 200, 'Day and its activities deleted');
 });
 
-// ─── POST /api/v1/trips/:tripId/itinerary/days/:dayId/activities ─────────────
 exports.addActivity = asyncHandler(async (req, res) => {
   const { title, type, startTime, endTime, location, notes, order } = req.body;
 
@@ -90,7 +84,6 @@ exports.addActivity = asyncHandler(async (req, res) => {
   successResponse(res, 201, 'Activity added', activity);
 });
 
-// ─── PATCH /api/v1/trips/:tripId/itinerary/days/:dayId/activities/:activityId ─
 exports.updateActivity = asyncHandler(async (req, res) => {
   const allowed = ['title', 'type', 'startTime', 'endTime', 'location', 'notes', 'order'];
   const updates = {};
@@ -109,7 +102,6 @@ exports.updateActivity = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Activity updated', activity);
 });
 
-// ─── DELETE /api/v1/trips/:tripId/itinerary/days/:dayId/activities/:activityId ─
 exports.deleteActivity = asyncHandler(async (req, res) => {
   const filter = { _id: req.params.activityId, trip: req.params.tripId };
   if (req.params.dayId) filter.day = req.params.dayId;
@@ -117,7 +109,6 @@ exports.deleteActivity = asyncHandler(async (req, res) => {
   const activity = await Activity.findOneAndDelete(filter);
   if (!activity) return errorResponse(res, 404, 'Activity not found');
 
-  // Remove reference from parent day
   await Day.findByIdAndUpdate(activity.day, {
     $pull: { activities: activity._id },
   });
@@ -125,7 +116,6 @@ exports.deleteActivity = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Activity deleted');
 });
 
-// ─── POST /api/v1/trips/:tripId/itinerary/days/:dayId/reorder ────────────────
 exports.reorderActivities = asyncHandler(async (req, res) => {
   const { orderedIds } = req.body;
   if (!Array.isArray(orderedIds)) {
@@ -141,7 +131,6 @@ exports.reorderActivities = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Activities reordered');
 });
 
-// ─── Validation ──────────────────────────────────────────────────────────────
 exports.addDayValidation = [
   body('date').isISO8601().withMessage('Valid date required'),
 ];

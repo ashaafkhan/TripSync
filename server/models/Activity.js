@@ -10,7 +10,7 @@ const activitySchema = new mongoose.Schema(
       enum: ['food', 'transport', 'stay', 'sightseeing', 'activity', 'shopping', 'other'],
       default: 'other',
     },
-    startTime: { type: String, default: '' }, // HH:MM
+    startTime: { type: String, default: '' },
     endTime: { type: String, default: '' },
     location: { type: String, default: '' },
     notes: { type: String, default: '' },

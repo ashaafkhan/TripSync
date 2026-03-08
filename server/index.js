@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const connectDB = require('./config/db');
 
-// Route imports
 const authRoutes = require('./routes/auth');
 const tripRoutes = require('./routes/trips');
 const itineraryRoutes = require('./routes/itinerary');
@@ -15,12 +14,10 @@ const fileRoutes = require('./routes/files');
 const reservationRoutes = require('./routes/reservations');
 const expenseRoutes = require('./routes/expenses');
 
-// Connect to MongoDB
 connectDB();
 
 const app = express();
 
-// ─── Global Middleware ────────────────────────────────────────────────────────
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
@@ -35,11 +32,8 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-// ─── API Routes ───────────────────────────────────────────────────────────────
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/trips', tripRoutes);
-
-// Nested routes under /api/v1/trips/:tripId
 app.use('/api/v1/trips/:tripId/itinerary', itineraryRoutes);
 app.use('/api/v1/trips/:tripId/comments', commentRoutes);
 app.use('/api/v1/trips/:tripId/checklists', checklistRoutes);
@@ -47,34 +41,28 @@ app.use('/api/v1/trips/:tripId/files', fileRoutes);
 app.use('/api/v1/trips/:tripId/reservations', reservationRoutes);
 app.use('/api/v1/trips/:tripId/expenses', expenseRoutes);
 
-// ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/v1/health', (req, res) => {
   res.json({ success: true, message: 'TripSync API is running' });
 });
 
-// ─── 404 Handler ──────────────────────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
 });
 
-// ─── Global Error Handler ─────────────────────────────────────────────────────
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(err.stack);
 
-  // Mongoose validation error
   if (err.name === 'ValidationError') {
     const errors = Object.values(err.errors).map((e) => e.message);
     return res.status(400).json({ success: false, message: 'Validation error', errors });
   }
 
-  // Mongoose duplicate key
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue)[0];
     return res.status(409).json({ success: false, message: `${field} already exists` });
   }
 
-  // JWT errors
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({ success: false, message: 'Invalid token' });
   }
@@ -89,7 +77,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ─── Start Server ─────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`TripSync API running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);

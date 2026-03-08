@@ -1,10 +1,10 @@
-const { body } = require('express-validator');
+﻿const { body } = require('express-validator');
 const mongoose = require('mongoose');
 const asyncHandler = require('../utils/asyncHandler');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 const Expense = require('../models/Expense');
 
-// ─── GET /api/v1/trips/:tripId/expenses ───────────────────────────────────────
+
 exports.getExpenses = asyncHandler(async (req, res) => {
   const expenses = await Expense.find({ trip: req.params.tripId })
     .populate('paidBy', 'name email avatar')
@@ -13,7 +13,6 @@ exports.getExpenses = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Expenses fetched', expenses, { count: expenses.length });
 });
 
-// ─── POST /api/v1/trips/:tripId/expenses ──────────────────────────────────────
 exports.addExpense = asyncHandler(async (req, res) => {
   const { title, amount, category, paidBy, date, notes } = req.body;
 
@@ -31,7 +30,6 @@ exports.addExpense = asyncHandler(async (req, res) => {
   successResponse(res, 201, 'Expense added', expense);
 });
 
-// ─── PATCH /api/v1/trips/:tripId/expenses/:expenseId ─────────────────────────
 exports.updateExpense = asyncHandler(async (req, res) => {
   const allowed = ['title', 'amount', 'category', 'paidBy', 'date', 'notes'];
   const updates = {};
@@ -47,7 +45,6 @@ exports.updateExpense = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Expense updated', expense);
 });
 
-// ─── DELETE /api/v1/trips/:tripId/expenses/:expenseId ────────────────────────
 exports.deleteExpense = asyncHandler(async (req, res) => {
   const expense = await Expense.findOneAndDelete({
     _id: req.params.expenseId,
@@ -57,23 +54,19 @@ exports.deleteExpense = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Expense deleted');
 });
 
-// ─── GET /api/v1/trips/:tripId/expenses/summary ───────────────────────────────
 exports.getExpenseSummary = asyncHandler(async (req, res) => {
   const tripId = new mongoose.Types.ObjectId(req.params.tripId);
 
   const [totalResult, byCategory, byMember] = await Promise.all([
-    // Grand total
     Expense.aggregate([
       { $match: { trip: tripId } },
       { $group: { _id: null, total: { $sum: '$amount' } } },
     ]),
-    // Total per category
     Expense.aggregate([
       { $match: { trip: tripId } },
       { $group: { _id: '$category', total: { $sum: '$amount' }, count: { $sum: 1 } } },
       { $sort: { total: -1 } },
     ]),
-    // Total per member (who paid)
     Expense.aggregate([
       { $match: { trip: tripId } },
       { $group: { _id: '$paidBy', total: { $sum: '$amount' }, count: { $sum: 1 } } },
@@ -100,7 +93,7 @@ exports.getExpenseSummary = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Expense summary', summary);
 });
 
-// ─── Validation ──────────────────────────────────────────────────────────────
+
 exports.addExpenseValidation = [
   body('title').notEmpty().withMessage('Title is required'),
   body('amount').isFloat({ gt: 0 }).withMessage('Amount must be a positive number'),

@@ -1,9 +1,9 @@
-const { body } = require('express-validator');
+﻿const { body } = require('express-validator');
 const asyncHandler = require('../utils/asyncHandler');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 const Comment = require('../models/Comment');
 
-// ─── GET /api/v1/trips/:tripId/comments?refType=activity&refId=xxx ───────────
+
 exports.getComments = asyncHandler(async (req, res) => {
   const { refType, refId } = req.query;
   const filter = { trip: req.params.tripId };
@@ -18,7 +18,6 @@ exports.getComments = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Comments fetched', comments, { count: comments.length });
 });
 
-// ─── POST /api/v1/trips/:tripId/comments ─────────────────────────────────────
 exports.addComment = asyncHandler(async (req, res) => {
   const { text, refType, refId, parentComment } = req.body;
 
@@ -35,12 +34,10 @@ exports.addComment = asyncHandler(async (req, res) => {
   successResponse(res, 201, 'Comment added', comment);
 });
 
-// ─── PATCH /api/v1/trips/:tripId/comments/:commentId ─────────────────────────
 exports.editComment = asyncHandler(async (req, res) => {
   const comment = await Comment.findOne({ _id: req.params.commentId, trip: req.params.tripId });
   if (!comment) return errorResponse(res, 404, 'Comment not found');
 
-  // Only the author may edit
   if (comment.author.toString() !== req.user._id.toString()) {
     return errorResponse(res, 403, 'Only the comment author can edit this comment');
   }
@@ -52,7 +49,6 @@ exports.editComment = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Comment updated', comment);
 });
 
-// ─── DELETE /api/v1/trips/:tripId/comments/:commentId ────────────────────────
 exports.deleteComment = asyncHandler(async (req, res) => {
   const comment = await Comment.findOne({ _id: req.params.commentId, trip: req.params.tripId });
   if (!comment) return errorResponse(res, 404, 'Comment not found');
@@ -63,14 +59,13 @@ exports.deleteComment = asyncHandler(async (req, res) => {
     return errorResponse(res, 403, 'Only the author or trip owner can delete this comment');
   }
 
-  // Also delete replies to this comment
   await Comment.deleteMany({ parentComment: comment._id });
   await comment.deleteOne();
 
   successResponse(res, 200, 'Comment deleted');
 });
 
-// ─── Validation ──────────────────────────────────────────────────────────────
+
 exports.addCommentValidation = [
   body('text').notEmpty().withMessage('Comment text is required'),
   body('refType').isIn(['activity', 'day']).withMessage('refType must be activity or day'),

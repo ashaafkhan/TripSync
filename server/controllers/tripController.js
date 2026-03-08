@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+﻿const { body } = require('express-validator');
 const asyncHandler = require('../utils/asyncHandler');
 const { successResponse, errorResponse } = require('../utils/apiResponse');
 const Trip = require('../models/Trip');
@@ -12,7 +12,6 @@ const File = require('../models/File');
 const Reservation = require('../models/Reservation');
 const Expense = require('../models/Expense');
 
-// ─── GET /api/v1/trips ───────────────────────────────────────────────────────
 exports.getTrips = asyncHandler(async (req, res) => {
   const trips = await Trip.find({ 'members.user': req.user._id })
     .populate('members.user', 'name email avatar')
@@ -21,7 +20,6 @@ exports.getTrips = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Trips fetched', trips, { count: trips.length });
 });
 
-// ─── POST /api/v1/trips ──────────────────────────────────────────────────────
 exports.createTrip = asyncHandler(async (req, res) => {
   const { title, destination, startDate, endDate, coverImage, description, budget } = req.body;
 
@@ -41,14 +39,11 @@ exports.createTrip = asyncHandler(async (req, res) => {
   successResponse(res, 201, 'Trip created', populated);
 });
 
-// ─── GET /api/v1/trips/:tripId ───────────────────────────────────────────────
 exports.getTrip = asyncHandler(async (req, res) => {
-  // req.trip already set + verified by checkRole(['owner','editor','viewer'])
   await req.trip.populate('members.user', 'name email avatar');
   successResponse(res, 200, 'Trip fetched', req.trip);
 });
 
-// ─── PATCH /api/v1/trips/:tripId ─────────────────────────────────────────────
 exports.updateTrip = asyncHandler(async (req, res) => {
   const allowed = ['title', 'destination', 'startDate', 'endDate', 'coverImage', 'description', 'budget'];
   const updates = {};
@@ -62,7 +57,6 @@ exports.updateTrip = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Trip updated', trip);
 });
 
-// ─── DELETE /api/v1/trips/:tripId ────────────────────────────────────────────
 exports.deleteTrip = asyncHandler(async (req, res) => {
   const tripId = req.params.tripId;
 
@@ -80,7 +74,6 @@ exports.deleteTrip = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Trip and all related data deleted');
 });
 
-// ─── POST /api/v1/trips/:tripId/invite ───────────────────────────────────────
 exports.inviteMember = asyncHandler(async (req, res) => {
   const { email, role } = req.body;
   const trip = req.trip;
@@ -89,12 +82,10 @@ exports.inviteMember = asyncHandler(async (req, res) => {
   const invitee = await User.findOne({ email });
 
   if (invitee) {
-    // User exists — add directly
     const alreadyMember = trip.members.some((m) => m.user.toString() === invitee._id.toString());
     if (alreadyMember) return errorResponse(res, 409, 'User is already a member of this trip');
 
     trip.members.push({ user: invitee._id, role: resolvedRole });
-    // Remove from pending if they were there
     trip.pendingInvites = trip.pendingInvites.filter((i) => i.email !== email.toLowerCase());
     await trip.save();
     await trip.populate('members.user', 'name email avatar');
@@ -111,7 +102,6 @@ exports.inviteMember = asyncHandler(async (req, res) => {
     return successResponse(res, 200, 'Member invited', trip);
   }
 
-  // User doesn't exist yet — store pending invite and send sign-up email
   const alreadyPending = trip.pendingInvites.some((i) => i.email === email.toLowerCase());
   if (alreadyPending) return errorResponse(res, 409, 'An invite has already been sent to this email');
 
@@ -130,7 +120,6 @@ exports.inviteMember = asyncHandler(async (req, res) => {
   successResponse(res, 200, `Invite sent to ${email}. They will be added when they sign up.`, trip);
 });
 
-// ─── PATCH /api/v1/trips/:tripId/members/:userId ─────────────────────────────
 exports.changeMemberRole = asyncHandler(async (req, res) => {
   const { role } = req.body;
   const trip = req.trip;
@@ -148,7 +137,6 @@ exports.changeMemberRole = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Member role updated', trip);
 });
 
-// ─── DELETE /api/v1/trips/:tripId/members/:userId ─────────────────────────────
 exports.removeMember = asyncHandler(async (req, res) => {
   const trip = req.trip;
   const { userId } = req.params;
@@ -166,7 +154,6 @@ exports.removeMember = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'Member removed');
 });
 
-// ─── POST /api/v1/trips/:tripId/leave ────────────────────────────────────────
 exports.leaveTrip = asyncHandler(async (req, res) => {
   const trip = req.trip;
   const userId = req.user._id.toString();
@@ -183,7 +170,6 @@ exports.leaveTrip = asyncHandler(async (req, res) => {
   successResponse(res, 200, 'You have left the trip');
 });
 
-// ─── Validation ──────────────────────────────────────────────────────────────
 exports.createTripValidation = [
   body('title').notEmpty().withMessage('Title is required'),
   body('destination').notEmpty().withMessage('Destination is required'),

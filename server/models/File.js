@@ -6,7 +6,7 @@ const fileSchema = new mongoose.Schema(
     uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true },
     url: { type: String, required: true },
-    publicId: { type: String, required: true }, // Cloudinary public_id for deletion
+    publicId: { type: String, required: true },
     type: { type: String, enum: ['image', 'pdf', 'document', 'other'], default: 'other' },
     size: { type: Number, default: 0 },
   },
