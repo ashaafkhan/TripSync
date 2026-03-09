@@ -1,6 +1,6 @@
 import api from './api';
 import type { User } from '../types';
-import { signInWithPopup } from 'firebase/auth';
+import { signInWithRedirect, getRedirectResult } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
 
 export const authService = {
@@ -28,8 +28,13 @@ export const authService = {
     return res.data;
   },
 
-  async loginWithGoogle(): Promise<{ user: User; token: string }> {
-    const result = await signInWithPopup(auth, googleProvider);
+  async initiateGoogleLogin(): Promise<void> {
+    await signInWithRedirect(auth, googleProvider);
+  },
+
+  async handleGoogleRedirect(): Promise<{ user: User; token: string } | null> {
+    const result = await getRedirectResult(auth);
+    if (!result) return null;
     const idToken = await result.user.getIdToken();
     const res = await api.post('/auth/google', { idToken }) as any;
     return res.data;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -29,6 +29,23 @@ export function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
+  useEffect(() => {
+    setGoogleLoading(true);
+    authService.handleGoogleRedirect()
+      .then((result) => {
+        if (!result) return;
+        const { user, token } = result;
+        const normalizedUser = { id: (user as any)._id ?? user.id, name: user.name, email: user.email, avatar: user.avatar };
+        login(normalizedUser, token);
+        toast.success(`Welcome, ${user.name.split(' ')[0]}!`);
+        navigate('/dashboard');
+      })
+      .catch((err: any) => {
+        toast.error(err.message || 'Google sign-in failed');
+      })
+      .finally(() => setGoogleLoading(false));
+  }, []);
+
   const onSubmit = async (data: FormData) => {
     try {
       const { user, token } = await authService.login(data.email, data.password);
@@ -42,19 +59,11 @@ export function LoginPage() {
   };
 
   const handleGoogle = async () => {
-    setGoogleLoading(true);
     try {
-      const { user, token } = await authService.loginWithGoogle();
-      const normalizedUser = { id: (user as any)._id ?? user.id, name: user.name, email: user.email, avatar: user.avatar };
-      login(normalizedUser, token);
-      toast.success(`Welcome, ${user.name.split(' ')[0]}!`);
-      navigate('/dashboard');
+      await authService.initiateGoogleLogin();
+      // page will redirect to Google — no further handling needed here
     } catch (err: any) {
-      if (err.code !== 'auth/popup-closed-by-user') {
-        toast.error(err.message || 'Google sign-in failed');
-      }
-    } finally {
-      setGoogleLoading(false);
+      toast.error(err.message || 'Google sign-in failed');
     }
   };
 
