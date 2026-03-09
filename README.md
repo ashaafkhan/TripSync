@@ -281,20 +281,4 @@ VITE_FIREBASE_MEASUREMENT_ID=...
 - CORS restricted to `CLIENT_URL` environment variable
 - Cloudinary uploads streamed server-side — client never gets API secrets
 
----
 
-## 🧑‍💻 Author
-
-**Mohammed Ashaaf Khan**
-
-[![GitHub](https://img.shields.io/badge/GitHub-ashaafkhan-181717?style=flat-square&logo=github)](https://github.com/ashaafkhan)
-
----
-
-<div align="center">
-
-Built with ❤️ for the Buildathon 2026
-
-⭐ Star this repo if you found it useful!
-
-</div>
