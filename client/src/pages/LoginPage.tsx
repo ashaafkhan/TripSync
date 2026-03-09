@@ -120,12 +120,6 @@ export function LoginPage() {
         </button>
       </form>
 
-      <div className="mt-4 text-center text-sm text-[#6B7280]">
-        <p className="mt-1 text-xs text-[#6B7280] bg-[#F8F9FA] rounded-lg p-2">
-          Demo: use any email from <strong>alice@example.com</strong>, <strong>bob@example.com</strong>, etc.
-        </p>
-      </div>
-
       <p className="mt-6 text-center text-sm text-[#6B7280]">
         Don't have an account?{' '}
         <Link to="/register" className="text-[#E94560] font-semibold hover:underline">
